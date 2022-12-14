@@ -11,6 +11,12 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os, json
+
+# Load token in token.json file
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+with open("../token.json") as f:
+    token = json.load(f)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +31,10 @@ SECRET_KEY = 'django-insecure-diy3kt0z&+qhhjr)^q@@snce)&49sftyyaysr#0z1rp8juvi=-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    # '615c-60-249-245-166.jp.ngrok.io',
+    '*',
+]
 
 
 # Application definition
@@ -37,8 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'chatGPTlinebot.apps.chatGPTlinebotConfig',
+    'chatGPT.apps.chatGPTConfig',
 ]
 
 MIDDLEWARE = [
@@ -125,6 +133,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Linebot config.
-LINE_CHANNEL_SECRET =
+LINE_CHANNEL_SECRET = token['LINE_CHANNEL_SECRET']
 
-LINE_CHANNEL_ACCESS_TOKEN = 
+LINE_CHANNEL_ACCESS_TOKEN = token['LINE_CHANNEL_ACCESS_TOKEN']

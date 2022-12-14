@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  Linebot:
+    image: hotshot824/chatgpt_linebot:0.0.2
+    restart: always
+    stdin_open: true
+    tty: true
+    environment:
+      TZ: /etc/localtime
+    volumes:
+      - ./src:/home/linebot/server
+    ports:
+      - 8000:8000
+    command: 
+      python3 /home/linebot/server/manage.py runserver 0.0.0.0:8000
