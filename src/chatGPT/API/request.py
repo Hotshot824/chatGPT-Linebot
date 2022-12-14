@@ -13,7 +13,7 @@ class chatGPT():
 
     def Request(self, message):
         response = openai.Completion.create(
-        model="text-davinci-003",
+        model=self.__config['model'],
         prompt=message,
         max_tokens=self.__config['max_token'],
         temperature=self.__config['temperature'],
