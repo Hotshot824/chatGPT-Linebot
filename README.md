@@ -1,6 +1,10 @@
 ## chatGPT-Linebot
 
+<br>
 
+![](https://github.com/Hotshot824/chatGPT-Linebot/blob/main/docs/linebot-example.JPG?raw=true)
+
+<br>
 
 ### Feature
 
