@@ -4,10 +4,11 @@
 
 ### Feature
 
-- chatGPT on line 
+- chatGPT on linebot 
 - Run on docker-compose 
 - Publish on docker hub
 - Use python3 django
+- Only the first response is processed each time
 
 ### Require
 
@@ -33,6 +34,7 @@ config path on `src/token.json`
 3. set token.json in src/token.json
 4. in chatGPT-Linebot directory run `docker-compose up -d`
 5. service on localhost:8000/chatGPT/callback
+6. edit the Line Webhook URL 
 
 [LINE Bot Tutorial]: https://github.com/FawenYo/LINE_Bot_Tutorial
 [key]: https://openai.com/api/

@@ -8,7 +8,7 @@ class chatGPT():
     def __get_config(self):
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
         print(os.getcwd())
-        with open("../../token.json") as f:
+        with open("../../config.json") as f:
             return json.load(f)['OPENAI_API']
 
     def Request(self, message):
