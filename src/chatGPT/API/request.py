@@ -8,13 +8,12 @@ class chatGPT():
     def __get_config(self):
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
         print(os.getcwd())
-        with open("../../token.json") as f:
+        with open("../../config.json") as f:
             return json.load(f)['OPENAI_API']
-
 
     def Request(self, message):
         response = openai.Completion.create(
-        model="text-davinci-003",
+        model=self.__config['model'],
         prompt=message,
         max_tokens=self.__config['max_token'],
         temperature=self.__config['temperature'],

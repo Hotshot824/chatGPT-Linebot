@@ -13,6 +13,8 @@ import os
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 
+waiting = []
+
 @csrf_exempt
 def callback(request):
  
@@ -29,11 +31,17 @@ def callback(request):
 
         for event in events:
             if isinstance(event, MessageEvent):
-                chatGPT = API.chatGPT()
-                line_bot_api.reply_message(
-                    event.reply_token,
-                    TextSendMessage(text=chatGPT.Request(event.message.text))
-                )
+                UserId = event.source.user_id
+                if UserId in waiting:
+                    pass
+                else:    
+                    waiting.append(UserId)
+                    chatGPT = API.chatGPT()
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=chatGPT.Request(event.message.text))
+                    )
+                    waiting.append(UserId)
         return HttpResponse()
     else:
         return HttpResponseBadRequest()

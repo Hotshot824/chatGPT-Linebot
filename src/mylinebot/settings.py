@@ -15,7 +15,7 @@ import os, json
 
 # Load token in token.json file
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
-with open("../token.json") as f:
+with open("../config.json") as f:
     token = json.load(f)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
