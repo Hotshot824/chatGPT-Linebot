@@ -1,9 +1,8 @@
-import openai, json, os, requests
+import json, os, requests
 
 class chatGPT():
     def __init__(self):
         self.__config  = self.__get_config()
-        openai.api_key = self.__config['openai_api_key']
 
     def __get_config(self):
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -24,7 +23,7 @@ class chatGPT():
                 "max_tokens": self.__config['max_token'],
                 "temperature": self.__config['temperature'],
             },
-            timeout=self.__config['timeout'],  # Set timeout to 5 seconds
+            timeout=10,  # Set timeout to 5 seconds
         )
         response = response.json()
         return response['choices'][0]['text'].lstrip()

@@ -35,13 +35,11 @@ def callback(request):
                 if UserId in waiting:
                     pass
                 else:    
-                    waiting.append(UserId)
                     chatGPT = API.chatGPT()
                     line_bot_api.reply_message(
-                        event.reply_token,
-                        TextSendMessage(text=chatGPT.Request(event.message.text))
+                    event.reply_token,
+                    TextSendMessage(text=chatGPT.Request(event.message.text))
                     )
-                    waiting.append(UserId)
         return HttpResponse()
     else:
         return HttpResponseBadRequest()
