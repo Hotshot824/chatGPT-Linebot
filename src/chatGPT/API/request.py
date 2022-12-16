@@ -24,7 +24,7 @@ class chatGPT():
                 "max_tokens": self.__config['max_token'],
                 "temperature": self.__config['temperature'],
             },
-            timeout=10,  # Set timeout to 5 seconds
+            timeout=self.__config['timeout'],  # Set timeout to 5 seconds
         )
         response = response.json()
         return response['choices'][0]['text'].lstrip()

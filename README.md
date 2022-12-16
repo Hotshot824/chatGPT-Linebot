@@ -24,6 +24,7 @@ config path on `src/token.json`
     - model
     - max_token
     - temperature
+    - timeout: each request timeout.
 - "LINE_CHANNEL_SECRET"
 - "LINE_CHANNEL_ACCESS_TOKEN"
 
