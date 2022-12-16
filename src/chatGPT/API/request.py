@@ -1,4 +1,4 @@
-import openai, json, os
+import openai, json, os, requests
 
 class chatGPT():
     def __init__(self):
@@ -12,10 +12,19 @@ class chatGPT():
             return json.load(f)['OPENAI_API']
 
     def Request(self, message):
-        response = openai.Completion.create(
-        model=self.__config['model'],
-        prompt=message,
-        max_tokens=self.__config['max_token'],
-        temperature=self.__config['temperature'],
+        response = requests.post(
+            "https://api.openai.com/v1/completions",
+            headers = {
+                "Authorization": f"Bearer {self.__config['openai_api_key']}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "prompt": message,
+                "model": self.__config['model'],
+                "max_tokens": self.__config['max_token'],
+                "temperature": self.__config['temperature'],
+            },
+            timeout=10,  # Set timeout to 5 seconds
         )
+        response = response.json()
         return response['choices'][0]['text'].lstrip()
