@@ -13,4 +13,4 @@ services:
     ports:
       - 8000:8000
     command: 
-      python3 /home/linebot/server/manage.py runserver 0.0.0.0:8000
+      python3 /home/linebot/server/manage.py runserver 0.0.0.0:8000 --noreload
