@@ -4,38 +4,38 @@
 
 ### Feature
 
-- chatGPT on linebot 
-- Run on docker-compose 
-- Publish on docker hub
-- Use python3 django
-- Only the first response is processed each time
+- `chatGPT` on Line Bot 
+- Runs on `docker-compose` 
+- Published on `Docker Hub`
+- Uses `Python3 Django`
+- Processes only the first response each time
 
-### Require
+### Requirements
 
-- Must know how to set up Line Bot
-    - refence: [LINE Bot Tutorial]
-- Get the OpenAi api [KEY] 
+- Knowledge of setting up a `Line Bot`
+    - Reference: [LINE Bot Tutorial]
+- Obtain an `OpenAI` API [KEY]
 
-### Config  
+### Configuration  
 
-config path on `src/token.json` 
+Config path is located at `src/token.json` 
 - "OPENAI_API"
-    - openai_api_key : You openAI key
-    - model
-    - max_token
-    - temperature
-    - timeout: each request timeout.
+    - `openai_api_key`: Your OpenAI key
+    - `model`
+    - `max_token`
+    - `temperature`
+    - `timeout`: Timeout for each request
 - "LINE_CHANNEL_SECRET"
 - "LINE_CHANNEL_ACCESS_TOKEN"
 
-### Build from scratch
+### Build from Scratch
 
-1. clone repository to the local
-2. install docker and docker-compose
-3. set token.json in src/token.json
-4. in chatGPT-Linebot directory run `docker-compose up -d`
-5. service on localhost:8000/chatGPT/callback
-6. edit the Line Webhook URL 
+1. Clone the repository locally
+2. Install Docker and Docker Compose
+3. Set `token.json` in `src/token.json`
+4. In `chatGPT-Linebot` directory, run `docker-compose up -d`
+5. Service will be available on `localhost:8000/chatGPT/callback`
+6. Edit the Line Webhook URL 
 
 [LINE Bot Tutorial]: https://github.com/FawenYo/LINE_Bot_Tutorial
 [key]: https://openai.com/api/

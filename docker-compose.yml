@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   Linebot:
-    image: hotshot824/chatgpt_linebot:0.0.1
+    image: hotshot824/chatgpt_linebot:0.0.2
     restart: always
     stdin_open: true
     tty: true
@@ -10,6 +10,7 @@ services:
       TZ: /etc/localtime
     volumes:
       - ./src:/home/linebot/server
+      - /etc/localtime:/etc/localtime:ro
     ports:
       - 8000:8000
     command: 
