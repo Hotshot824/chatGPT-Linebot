@@ -1,0 +1,10 @@
+{
+    "text-davinci-003": {
+        "url": "https://api.openai.com/v1/completions",
+        "process_response": "__process_gpt3_response" 
+    },
+    "gpt-3.5-turbo": {
+        "url": "https://api.openai.com/v1/chat/completions",
+        "process_response": "__process_gpt3_5_response" 
+    }
+}
