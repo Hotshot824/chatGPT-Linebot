@@ -18,6 +18,10 @@ class chatHistory():
         else:
             self.__user = User.objects.get(user=self.__user_id)
 
+    def _get_count(self) -> int:
+        related_chats = Chat.objects.filter(user=self.__user).order_by('date')
+        return related_chats.count()
+
     def _construct_chat(self, message: str) -> str:
         related_chats = Chat.objects.filter(user=self.__user).order_by('date')
         history = ""

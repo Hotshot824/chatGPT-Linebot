@@ -78,6 +78,9 @@ class chatRequest(history.chatHistory):
 
         except requests.exceptions.RequestException as e:
             self.__response = "Network Error: This request is time out!"
-
+            
     def GetResponse(self) -> str:
+        count = self._get_count()
+        if count > 10:
+            self.__response += "\nThe number of conversations has reached {}, Enter #clean to restart a new topic.".format(count+1)
         return self.__response
