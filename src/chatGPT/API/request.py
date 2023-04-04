@@ -57,7 +57,7 @@ class chatRequest(history.chatHistory):
             self.__response = "A conversation has been restarted!"
             return
 
-        data = self.__construct_request_data(self._construct_messages(message))
+        data = self.__construct_request_data(self._construct_chat(message))
         try:
             response = requests.post(
                 self.__url,

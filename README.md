@@ -7,7 +7,7 @@
 - `chatGPT` on Line Bot 
 - Runs on `docker-compose` 
 - Published on `Docker Hub`
-- Uses `Python3 Django`
+- Uses `Python3 Django` with `SQLite`
 - Processes only the first response each time
 
 ### Requirements

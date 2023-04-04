@@ -1,38 +1,38 @@
 import json
 import os
 import requests
+from chatGPT.models import User, Chat
 
 
 class chatHistory():
     def __init__(self, user_id):
         self.__user_id = user_id
-        self.__history = {}
-        self.__get_history()
+        self.__get_user()
 
-    def __get_history(self):
-        with open("../../history.json", "r") as f:
-            history = json.load(f)
-        if self.__user_id in history:
-            self.__history = history[self.__user_id]
+    def __get_user(self):
+        if not User.objects.filter(user=self.__user_id).exists():
+            user = User.objects.create(
+                user=self.__user_id
+            )
+            self.__user = user
         else:
-            history[self.__user_id] = {"chat": ""}
-            self.__history = history[self.__user_id]
+            self.__user = User.objects.get(user=self.__user_id)
 
-    def __storage_histroy(self):
-        with open("../../history.json", "r") as f:
-            history = json.load(f)
-        history[self.__user_id] = self.__history
-        with open("../../history.json", "w") as f:
-            json.dump(history, f, ensure_ascii=False, indent=4)
-
-    def _construct_messages(self, message: str) -> str:
-        return self.__history['chat'] + message
+    def _construct_chat(self, message: str) -> str:
+        related_chats = Chat.objects.filter(user=self.__user).order_by('date')
+        history = ""
+        for chat in related_chats:
+            history += chat.question + "\n"
+            history += chat.answer + "\n"
+            
+        return history + message
 
     def _storage_messages(self, message: str, response: str):
-        self.__history['chat'] += message
-        self.__history['chat'] += response
-        self.__storage_histroy()
+        Chat.objects.create(
+            user=self.__user,
+            question=message,
+            answer=response
+        )
 
     def _clean_messages(self):
-        self.__history['chat'] = ""
-        self.__storage_histroy()
+        Chat.objects.filter(user=self.__user).delete()
