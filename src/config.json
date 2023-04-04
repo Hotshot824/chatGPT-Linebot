@@ -1,11 +1,11 @@
 {
     "OPENAI_API": {
-        "openai_api_key": "",
+        "openai_api_key": "ENTER YOUR OPENAPI KEY",
         "model": "gpt-3.5-turbo",
         "max_token": 1024,
         "temperature": 0.8,
-        "timeout": 15
+        "timeout": 30
     },
-    "LINE_CHANNEL_SECRET": "",
-    "LINE_CHANNEL_ACCESS_TOKEN": ""
+    "LINE_CHANNEL_SECRET": "YOUR LINE SECRET",
+    "LINE_CHANNEL_ACCESS_TOKEN": "YOUR LINE ACCESS TOKEN"
 }

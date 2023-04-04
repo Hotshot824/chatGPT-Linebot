@@ -57,7 +57,7 @@ class chatRequest(history.chatHistory):
             self.__response = "A conversation has been restarted!"
             return
 
-        data = self.__construct_request_data(self._construct_messages(message))
+        data = self.__construct_request_data(self._construct_chat(message))
         try:
             response = requests.post(
                 self.__url,
@@ -69,8 +69,12 @@ class chatRequest(history.chatHistory):
                 timeout=self.__timeout,  # Set timeout to 10 seconds
             ).json()
             
-            self.__process_response(response)
-            self._storage_messages(message, self.__response)
+            # Process response
+            if "error" in response:
+                self.__response = response["error"]["message"]
+            else:
+                self.__process_response(response)
+                self._storage_messages(message, self.__response)
 
         except requests.exceptions.RequestException as e:
             self.__response = "Network Error: This request is time out!"
