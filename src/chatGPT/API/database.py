@@ -4,7 +4,7 @@ import requests
 from chatGPT.models import User, Chat
 
 
-class chatHistory():
+class chatDatabase():
     def __init__(self, user_id):
         self.__user_id = user_id
         self.__get_user()
@@ -19,16 +19,19 @@ class chatHistory():
             self.__user = User.objects.get(user=self.__user_id)
 
     def _get_count(self) -> int:
-        related_chats = Chat.objects.filter(user=self.__user).order_by('date')
+        related_chats = Chat.objects.filter(user=self.__user)
         return related_chats.count()
 
     def _construct_chat(self, message: str) -> str:
         related_chats = Chat.objects.filter(user=self.__user).order_by('date')
+
+        # Organize past chat record into a string.
         history = ""
         for chat in related_chats:
             history += chat.question + "\n"
             history += chat.answer + "\n"
-            
+
+        # Add this time question.
         return history + message
 
     def _storage_messages(self, message: str, response: str):

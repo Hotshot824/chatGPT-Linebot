@@ -1,14 +1,19 @@
-import chatGPT.API.history as history
-import json, os, requests
+import chatGPT.API.database as DB
+import json
+import os
+import requests
 
-class chatRequest(history.chatHistory):
+
+class chatRequest(DB.chatDatabase):
     def __init__(self, user_id):
-        os.chdir(os.path.dirname(os.path.abspath(__file__)))
-        history.chatHistory.__init__(self, user_id)
+        DB.chatDatabase.__init__(self, user_id)
         self.__get_config()
         self.__response = ""
 
     def __get_config(self):
+        os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+        # Set config.
         with open("../../config.json", "r") as f:
             config = json.load(f)['OPENAI_API']
         self.__openai_api_key = config['openai_api_key']
@@ -17,17 +22,10 @@ class chatRequest(history.chatHistory):
         self.__temperature = config['temperature']
         self.__timeout = config['timeout']
 
+        # Set different model config.
         with open("../../models.json", "r") as f:
             config = json.load(f)[self.__model]
         self.__url = config['url']
-        self.__choices_response_process()
-
-    def __choices_response_process(self):
-        choices = {
-            "text-davinci-003": self.__process_gpt3_response,
-            "gpt-3.5-turbo": self.__process_gpt3_5_response
-        }
-        self.__process_response = choices[self.__model]
 
     def __construct_request_data(self, message: str) -> dict:
         if self.__model == "gpt-3.5-turbo":
@@ -45,6 +43,16 @@ class chatRequest(history.chatHistory):
                 "temperature": self.__temperature,
             }
 
+    def __process_response(self, message: str, response: str):
+        choices = {
+            "text-davinci-003": self.__process_gpt3_response,
+            "gpt-3.5-turbo": self.__process_gpt3_5_response
+        }
+
+        # Processed response then storage this time chat to database.
+        choices[self.__model](response)
+        self._storage_messages(message, self.__response)
+
     def __process_gpt3_response(self, response: str):
         self.__response = response['choices'][0]['text'].lstrip()
 
@@ -57,7 +65,9 @@ class chatRequest(history.chatHistory):
             self.__response = "A conversation has been restarted!"
             return
 
+        # Get all history chats construct message, then construct request body.
         data = self.__construct_request_data(self._construct_chat(message))
+
         try:
             response = requests.post(
                 self.__url,
@@ -66,21 +76,20 @@ class chatRequest(history.chatHistory):
                     "Content-Type": "application/json",
                 },
                 json=data,
-                timeout=self.__timeout,  # Set timeout to 10 seconds
+                # Set request timeout.
+                timeout=self.__timeout,
             ).json()
-            
-            # Process response
+
             if "error" in response:
                 self.__response = response["error"]["message"]
             else:
-                self.__process_response(response)
-                self._storage_messages(message, self.__response)
+                self.__process_response(message, response)
 
         except requests.exceptions.RequestException as e:
-            self.__response = "Network Error: This request is time out!"
-            
+            self.__response = "Network error!"
+
     def GetResponse(self) -> str:
         count = self._get_count()
-        if count > 10:
-            self.__response += "\nThe number of conversations has reached {}, Enter #clean to restart a new topic.".format(count+1)
+        if count >= 10:
+            self.__response += "\nThe number of chats exceeds {}, enter #clean to start a new chat.".format(count)
         return self.__response

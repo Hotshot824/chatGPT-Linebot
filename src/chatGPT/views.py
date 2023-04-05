@@ -16,10 +16,9 @@ logger = logging.getLogger(__name__)
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 
-
 @csrf_exempt
 def callback(request):
- 
+
     if request.method == 'POST':
         signature = request.META['HTTP_X_LINE_SIGNATURE']
         body = request.body.decode('utf-8')
@@ -35,12 +34,16 @@ def callback(request):
 
         for event in events:
             if isinstance(event, MessageEvent):
+                # Create chatGPT and send request.
                 chatGPT = API.chatRequest(event.source.user_id)
                 chatGPT.Request(event.message.text)
+
+                # Send response to linebot user.
                 line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text=chatGPT.GetResponse())
                 )
+                
         return HttpResponse()
     else:
         return HttpResponseBadRequest()
