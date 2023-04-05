@@ -8,7 +8,7 @@
 - Runs on `docker-compose` 
 - Published on `Docker Hub`
 - Uses `Python3 Django` with `SQLite`
-- Processes only the first response each time
+- Only the first response is processed each time
 
 ### Requirements
 
@@ -18,8 +18,21 @@
 
 ### Configuration  
 
-Config path is located at `src/config.json` 
-- "OPENAI_API"
+Config path is located at `src/config.json`
+```json
+{
+    "OPENAI_API": {
+        "openai_api_key": "ENTER YOUR OPENAPI KEY",
+        "model": "gpt-3.5-turbo",
+        "max_token": 1024,
+        "temperature": 0.8,
+        "timeout": 30
+    },
+    "LINE_CHANNEL_SECRET": "YOUR LINE SECRET",
+    "LINE_CHANNEL_ACCESS_TOKEN": "YOUR LINE ACCESS TOKEN"
+}
+``` 
+- "OPENAI_API" detal can watch [Open AI Chat] 
     - `openai_api_key`: Your OpenAI key
     - `model`
     - `max_token`
@@ -38,10 +51,11 @@ All history session storage in `src/history.json`.
 5. Service will be available on `localhost:8000/chatGPT/callback`
 6. Edit the Line Webhook URL 
 
-### How to use
+### Client use
 
 1. Can have a continuous conversation.
 2. When you want to end a session, enter `#clean` to clean the history session.
 
 [LINE Bot Tutorial]: https://github.com/FawenYo/LINE_Bot_Tutorial
 [key]: https://openai.com/api/
+[Open AI Chat]: https://platform.openai.com/docs/api-reference/chat/create
