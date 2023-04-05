@@ -1,5 +1,6 @@
 from django.contrib import admin
 from chatGPT.models import User, Chat
+from django.contrib.sessions.models import Session
 
 # Register your models here.
 class UserAdmin(admin.ModelAdmin):

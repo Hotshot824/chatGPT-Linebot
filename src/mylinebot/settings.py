@@ -13,11 +13,6 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os, json
 
-# Load token in token.json file
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
-with open("../config.json") as f:
-    token = json.load(f)
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -132,7 +127,17 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Linebot config.
-LINE_CHANNEL_SECRET = token['LINE_CHANNEL_SECRET']
+# Session
+# https://docs.djangoproject.com/en/4.1/ref/settings/#sessions
 
-LINE_CHANNEL_ACCESS_TOKEN = token['LINE_CHANNEL_ACCESS_TOKEN']
+SESSION_COOKIE_AGE = 10800
+
+# Load token in token.json file
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+with open("../config.json") as f:
+    config = json.load(f)
+
+# Linebot config.
+LINE_CHANNEL_SECRET = config['LINE_CHANNEL_SECRET']
+
+LINE_CHANNEL_ACCESS_TOKEN = config['LINE_CHANNEL_ACCESS_TOKEN']
