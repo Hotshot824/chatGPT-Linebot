@@ -7,6 +7,7 @@ from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent, TextSendMessage
 
+from django.contrib.sessions.backends.db import SessionStore
 import chatGPT.API.request as API
 import os
 
@@ -15,6 +16,9 @@ logger = logging.getLogger(__name__)
 
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
+
+# This global variable storage response status.
+status = {}
 
 @csrf_exempt
 def callback(request):
@@ -34,16 +38,29 @@ def callback(request):
 
         for event in events:
             if isinstance(event, MessageEvent):
-                # Create chatGPT and send request.
-                chatGPT = API.chatRequest(event.source.user_id)
-                chatGPT.Request(event.message.text)
+                userid = event.source.user_id
+
+                if not userid in status:
+                    status[userid] = False
+
+                if status[userid]:
+                    response = "Please wait for generating a response!"
+                else:
+                    status[userid] = True
+
+                    # Create chatGPT and send request.
+                    chatGPT = API.chatRequest(userid)
+                    chatGPT.Request(event.message.text)
+                    response = chatGPT.GetResponse()
+                    
+                    status[userid] = False
 
                 # Send response to linebot user.
                 line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text=chatGPT.GetResponse())
+                TextSendMessage(text=response)
                 )
-                
+
         return HttpResponse()
     else:
         return HttpResponseBadRequest()

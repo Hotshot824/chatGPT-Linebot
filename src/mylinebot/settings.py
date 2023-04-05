@@ -127,6 +127,11 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Session
+# https://docs.djangoproject.com/en/4.1/ref/settings/#sessions
+
+SESSION_COOKIE_AGE = 10800
+
 # Load token in token.json file
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 with open("../config.json") as f:
