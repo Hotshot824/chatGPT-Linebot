@@ -15,10 +15,11 @@
 - Knowledge of setting up a `Line Bot`
     - Reference: [LINE Bot Tutorial]
 - Obtain an `OpenAI` API [KEY]
+- Using `ngrok` to build tunnel.
 
 ### Configuration  
 
-Config path is located at `src/config.json`
+**Linebot** config path is located at `src/config.json`
 ```json
 {
     "OPENAI_API": {
@@ -42,14 +43,23 @@ Config path is located at `src/config.json`
 - "LINE_CHANNEL_ACCESS_TOKEN"
 All history session storage in `src/history.json`.
 
+**Ngrok** config at init/ngrok/ngrok.yml
+
+```yml
+# Enter you ngrok authtoken
+authtoken: INPUT AUTHTOKEN
+```
+
 ### Build from Scratch
 
 1. Clone the repository locally
 2. Install Docker and Docker Compose
-3. Set `config.json` in `src/config.json`
+3. Set `config.json` in `src/config.json` and `ngrok.yml` in `init/ngrok/ngrok.yml`
 4. In `chatGPT-Linebot` directory, run `docker-compose up -d`
-5. Service will be available on `localhost:8000/chatGPT/callback`
-6. Edit the Line Webhook URL 
+5. Linebot will be listening at `localhost:8000/chatGPT/callback`
+6. Can use `curl -s ngrok:4040/api/tunnels | jq -r '.tunnels[0].public_url' | awk '{print "Linebot Listening at " $0 "/chatGPT/callback"}'`
+to get the ngrok tunnel address, or look at `docker compose up` output.
+7. Edit the Line Webhook URL
 
 ### Client use
 

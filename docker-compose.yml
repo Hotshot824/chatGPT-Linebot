@@ -2,16 +2,32 @@ version: "3.8"
 
 services:
   Linebot:
-    image: hotshot824/chatgpt_linebot:0.0.2
+    image: python:3.10-bullseye
     restart: always
+    depends_on:
+      - ngrok
     stdin_open: true
     tty: true
     environment:
       TZ: /etc/localtime
     volumes:
-      - ./src:/home/linebot/server
       - /etc/localtime:/etc/localtime:ro
+      - ./init/Linebot/:/root/init/
+      - ./src/:/root/src/
+    working_dir: /root/
     ports:
       - 8000:8000
-    command: 
-      python3 /home/linebot/server/manage.py runserver 0.0.0.0:8000 --noreload
+    entrypoint: bash /root/init/entrypoint.sh
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    restart: unless-stopped
+    volumes:
+      - ./init/ngrok/ngrok.yml:/etc/ngrok.yml:ro
+    ports:
+      - 4040:4040
+    command:
+      - "start"
+      - "--all"
+      - "--config"
+      - "/etc/ngrok.yml"
