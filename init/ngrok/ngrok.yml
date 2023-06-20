@@ -1,0 +1,8 @@
+version: 2
+
+# Enter you ngrok authtoken
+authtoken: INPUT AUTHTOKEN
+tunnels:
+  Linebot:
+    proto: http
+    addr: Linebot:8000
