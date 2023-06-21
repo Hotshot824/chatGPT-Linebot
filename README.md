@@ -44,7 +44,6 @@
 All history session storage in `src/history.json`.
 
 **Ngrok** config at init/ngrok/ngrok.yml
-
 ```yml
 # Enter you ngrok authtoken
 authtoken: INPUT AUTHTOKEN
@@ -57,8 +56,7 @@ authtoken: INPUT AUTHTOKEN
 3. Set `config.json` in `src/config.json` and `ngrok.yml` in `init/ngrok/ngrok.yml`
 4. In `chatGPT-Linebot` directory, run `docker-compose up -d`
 5. Linebot will be listening at `localhost:8000/chatGPT/callback`
-6. Can use `curl -s ngrok:4040/api/tunnels | jq -r '.tunnels[0].public_url' | awk '{print "Linebot Listening at " $0 "/chatGPT/callback"}'`
-to get the ngrok tunnel address, or look at `docker compose up` output.
+6. Using `curl -s localhost:4040/api/tunnels` get the ngrok tunnel address, or look at `docker compose up` output.
 7. Edit the Line Webhook URL
 
 ### Client use
