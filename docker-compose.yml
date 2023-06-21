@@ -4,8 +4,6 @@ services:
   Linebot:
     image: python:3.10-bullseye
     restart: always
-    depends_on:
-      - ngrok
     stdin_open: true
     tty: true
     environment:
@@ -18,6 +16,8 @@ services:
     ports:
       - 8000:8000
     entrypoint: bash /root/init/entrypoint.sh
+    depends_on:
+      - ngrok
 
   ngrok:
     image: ngrok/ngrok:latest
