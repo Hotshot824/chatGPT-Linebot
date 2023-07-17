@@ -39,6 +39,7 @@ def callback(request):
         for event in events:
             if isinstance(event, MessageEvent):
                 userid = event.source.user_id
+                text = event.message.text
 
                 if not userid in status:
                     status[userid] = False
@@ -48,12 +49,16 @@ def callback(request):
                 else:
                     status[userid] = True
 
-                    # Create chatGPT and send request.
-                    chatGPT = API.chatRequest(userid)
-                    chatGPT.Request(event.message.text)
-                    response = chatGPT.GetResponse()
-                    
-                    status[userid] = False
+                    try:
+                        # Create chatGPT and send request.
+                        chatGPT = API.chatRequest(userid)
+                        chatGPT.Request(text)
+                        response = chatGPT.GetResponse()
+                        status[userid] = False
+
+                        # Catch any error then recovery status.
+                    except Exception as e:
+                        status[userid] = False
 
                 # Send response to linebot user.
                 line_bot_api.reply_message(
