@@ -1,6 +1,7 @@
 import json
 import os
 import requests
+import tiktoken
 from chatGPT.models import User, Chat
 
 
@@ -22,14 +23,26 @@ class chatDatabase():
         related_chats = Chat.objects.filter(user=self.__user)
         return related_chats.count()
 
-    def _construct_chat(self, message: str) -> str:
-        related_chats = Chat.objects.filter(user=self.__user).order_by('date')
+    def __num_tokens_from_string(self, string: str, model: str) -> int:
+        # Returns the number of tokens in a text string.
+        encoding = tiktoken.encoding_for_model(model)
+        num_tokens = len(encoding.encode(string))
+        return num_tokens
+
+    def _construct_chat(self, message: str, model: str, max_token: int=1024) -> str:
+        # The order is from the early to the last.
+        related_chats = Chat.objects.filter(user=self.__user).order_by('-date')
 
         # Organize past chat record into a string.
         history = ""
         for chat in related_chats:
-            history += chat.question + "\n"
-            history += chat.answer + "\n"
+
+            count = self.__num_tokens_from_string(history + chat.question + "\n" + chat.answer + "\n" + message, model)
+            # Count greater than max toker, break for loop.
+            if count < max_token:
+                history += chat.question + "\n" + chat.answer + "\n"
+            else:
+                break
 
         # Add this time question.
         return history + message

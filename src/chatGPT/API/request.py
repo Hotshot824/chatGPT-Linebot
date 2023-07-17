@@ -3,7 +3,6 @@ import json
 import os
 import requests
 
-
 class chatRequest(DB.chatDatabase):
     def __init__(self, user_id):
         DB.chatDatabase.__init__(self, user_id)
@@ -66,7 +65,7 @@ class chatRequest(DB.chatDatabase):
             return
 
         # Get all history chats construct message, then construct request body.
-        data = self.__construct_request_data(self._construct_chat(message))
+        data = self.__construct_request_data(self._construct_chat(message, self.__model, self.__max_token))
 
         try:
             response = requests.post(
@@ -89,7 +88,4 @@ class chatRequest(DB.chatDatabase):
             self.__response = "Network error!"
 
     def GetResponse(self) -> str:
-        count = self._get_count()
-        if count >= 10:
-            self.__response += "\nThe number of chats exceeds {}, enter #clean to start a new chat.".format(count)
         return self.__response
