@@ -36,7 +36,6 @@ class chatDatabase():
         # Organize past chat record into a string.
         history = ""
         for chat in related_chats:
-
             count = self.__num_tokens_from_string(history + chat.question + "\n" + chat.answer + "\n" + message, model)
             # Count greater than max toker, break for loop.
             if count < max_token:
