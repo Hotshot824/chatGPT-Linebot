@@ -16,28 +16,41 @@ class chatRequest(DB.chatDatabase):
         with open("../../config.json", "r") as f:
             config = json.load(f)['OPENAI_API']
         self.__openai_api_key = config['openai_api_key']
-        self.__model = config['model']
         self.__max_token = config['max_token']
         self.__temperature = config['temperature']
         self.__timeout = config['timeout']
+        self.__handle_suffix(config)
 
         # Set different model config.
         with open("../../models.json", "r") as f:
             config = json.load(f)[self.__model]
         self.__url = config['url']
 
+    # Parsing suffixes and model names.
+    def __handle_suffix(self, config: json):
+        if "gpt-3.5-turbo" in config['model']:
+            self.__model = "gpt-3.5-turbo"
+            self.__suffix = config['model'].split("gpt-3.5-turbo", 1)[-1]
+        elif "gpt-4" in config['model']:
+            self.__model = "gpt-4"
+            self.__suffix = config['model'].split("gpt-4", 1)[-1]
+        else:
+            self.__model = config['model']
+            self.__suffix = ""
+
     def __construct_request_data(self, message: str) -> dict:
+        full_model_name = self.__model + self.__suffix
         if self.__model == "gpt-3.5-turbo":
             return {
                 "messages": [{"role": "user", "content": message}],
-                "model": self.__model,
+                "model": full_model_name,
                 "max_tokens": self.__max_token,
                 "temperature": self.__temperature,
             }
         elif self.__model == "text-davinci-003":
             return {
                 "prompt": message,
-                "model": self.__model,
+                "model": full_model_name,
                 "max_tokens": self.__max_token,
                 "temperature": self.__temperature,
             }
